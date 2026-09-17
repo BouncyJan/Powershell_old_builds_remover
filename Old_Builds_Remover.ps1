@@ -1,4 +1,4 @@
-$dirNamesToDelete = @("node_modules","dist"); # Nombres de subcarpetas para eliminar
+$dirNamesToDelete = @("node_modules","dist","bin","obj"); # Nombres de subcarpetas para eliminar
 $dirNamesToEvaluateUsage = @("src") # OPCIONAL, Nombres de subcarpetas a consider para calcular recursivamente la fecha de ultima modificacion, Por default el sistema solo evalua los hijos directos de la carpeta original, aqui podemos elegir uno o varios de esos hijos para evaluar recursivamente la ultima modificación real de todo su arbol de descendencia, pueden ser las mismas que las carpetas a eliminar.
 #un valor "*" analiza recursivamente todo el proyecto (+overhead), si la carpeta no existe se desestima. 
 $subDirs = Get-ChildItem -Directory # Lista de carpetas dentro del las cuales analizar
