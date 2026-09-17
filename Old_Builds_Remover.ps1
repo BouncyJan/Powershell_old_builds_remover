@@ -89,10 +89,16 @@ foreach ($subDir in $subDirs)
             continue
         }
         Write-Host "`t$subDirName/${dirToDelete}: Eliminando..." -NoNewline
-        Remove-Item "$subDirName/$dirToDelete" -Recurse -Force
         
+        try {
+            Remove-Item "$subDirName/$dirToDelete" -Recurse -Force -ErrorAction Stop
         Write-Host "`r`t$subDirName/${dirToDelete}:     Eliminado"
         $ContadorDeEliminaciones++
+        }
+        catch {
+            Write-Host "`r`t$subDirName/${dirToDelete}:     ERROR - $($_.Exception.Message)"
+        }
+        
     }
 
 }
