@@ -4,6 +4,9 @@ $dirNamesToEvaluateUsage = @("src") # OPCIONAL, Nombres de subcarpetas a conside
 $subDirs = Get-ChildItem -Directory # Lista de carpetas dentro del las cuales analizar
 $DiasMesesOAnios = @{Meses = 3} # Dias, Meses o Anios
 
+$DebugPreference = "SilentlyContinue"; # "SilentlyContinue" | "Continue"
+$VerbosePreference = "Continue"; # "SilentlyContinue" | "Continue"
+
 function CalcularMaximaFechaDeUltimaModificacion{
     
     param(
@@ -60,32 +63,32 @@ function ObtenerMayorLastWriteTime {
 }
 
 $fechaDeGracia = CalcularMaximaFechaDeUltimaModificacion @DiasMesesOAnios
-Write-Output $fechaDeGracia
+
 $ContadorDeEliminaciones = 0
 
 foreach ($subDir in $subDirs)
 {
     Write-Output "-----------------------------"
-    Write-Output "Procesando ${subDir}:"
+    Write-Output "Procesando `"${subDir}`":"
 
     $LastWriteTime = ObtenerMayorLastWriteTime $subdir
-    Write-Output $LastWriteTime
+    
     if($LastWriteTime -gt $fechaDeGracia){
-        Write-Output $subDir.LastWriteTime
-        Write-Output $fechaDeGracia
-        Write-Output "`t La ultima modificacion se encuentra dentro del periodo de gracia establecido"
+        Write-Debug "Threshold de fecha de ultima modificacion: $fechaDeGracia"
+        Write-Debug "Fecha de ultima modificacion: $LastWriteTime"
+        Write-Output "La ultima modificacion del proyecto se encuentra dentro del periodo de gracia establecido"
         continue
     }
 
     $subDirName = $subDir.name
 
-    Write-Output "`tEliminando Carpetas"
+    Write-Output "Buscando carpetas para eliminar."
     
     foreach ($dirToDelete in $dirNamesToDelete)
     {
         if(-not (Test-Path "$subDirName/$dirToDelete"))
         {
-            Write-Output "`t$subDirName/${dirToDelete}: `tNo existente"
+            Write-Verbose "`t$subDirName/${dirToDelete}: `tNo existente"
             continue
         }
         Write-Host "`t$subDirName/${dirToDelete}: Eliminando..." -NoNewline
@@ -103,4 +106,9 @@ foreach ($subDir in $subDirs)
 
 }
 Write-Output "-----------------------------"
-Write-Output "Se eliminaron $ContadorDeEliminaciones conjuntos de carpetas"
+
+if($ContadorDeEliminaciones -gt 0){
+    Write-Output "Se eliminaron $ContadorDeEliminaciones conjuntos de carpetas"
+} else {
+    Write-Output "No se elimino ninguna carpeta pues ninguna cumplia con los requisitos"
+}
