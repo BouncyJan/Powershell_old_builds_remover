@@ -1,8 +1,6 @@
 ## Powershell Script para eliminar builds, binarios y carpetas en general cuyos proyectos no sufrieron modificaciones en X tiempo.
 
 - Creado originalmente para eliminar las carpetas "node_modules" y "dist" de múltiples projectos NodeJS que no fueron manipulados hace tiempo porque pesan mucho :/.
-- Fue un desarrollo de un par de horitas
-- Ninguna LLM AI fue utilizada en el desarrollo o troubleshooting de este proyectito
 
 ### Uso:
 
